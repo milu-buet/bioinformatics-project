@@ -19,4 +19,4 @@ def loadRandomGnomeData(data_file):
 
 data_file = 'data/random_gnome.fasta'
 generateRandomGnome(1000,data_file)
-loadRandomGnomeData(data_file)
+print(loadRandomGnomeData(data_file))
