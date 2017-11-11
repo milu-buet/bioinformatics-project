@@ -35,7 +35,7 @@ class Aligner():
 	def setIndexedGnomes(self,inds):
 		self.indexed_gnomes = inds
 
-	def AllignExatcly(self, short_read):
+	def AlignExatcly(self, short_read):
 		most_likely_gnome_id, freq  = None , None
 		for ref_gnome_id in self.indexed_gnomes:
 			index = self.loadFMI(ref_gnome_id)
@@ -52,7 +52,7 @@ class Aligner():
 		else:
 			return None, None
 
-	def AllignApproximately(self, short_read):
+	def AlignApproximately(self, short_read):
 		pass
 
 
@@ -63,5 +63,5 @@ if __name__ == '__main__':
 	#print(al.loadFMI('aname'))
 	#al = Aligner('data/dataset1/')
 	al.setIndexedGnomes(['1','2'])
-	res = al.AllignExatcly("CAATT")
+	res = al.AlignExatcly("CAATT")
 	print(res)
