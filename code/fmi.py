@@ -1,4 +1,4 @@
-class BWT():
+class FMI():
 	def __init__(self, t):
 		self.LastRow = {}
 		self.bwt = self.build_bwt(t)
@@ -36,6 +36,12 @@ class BWT():
 			for char in occ:
 				occ[char][i] = occ[char][i-1]
 			occ[c][i] += 1
+
+			#-----------------------
+			# print("Step", i)
+			# for k,v in occ.items():
+			# 	print(k,v)
+			#-----------------------
 		return occ
 
 	#----------------------------------------------------------
@@ -66,35 +72,49 @@ class BWT():
 	#----------------------------------------------------------
 	# return the number of occurences of pattern in original text.
 	def query(self, pattern):
-		print(self.Count)
-		print(self.LastRow)
-
-		for k,v  in self.Occ.items():
-			print(k,v)
 		i = len(pattern)-1
 		c = pattern[i]
 		first_row = self.Count[c]
 		last_row = self.LastRow[c]
-		print('{}. first: {}, last: {}'.format(c,first_row, last_row))
+		# print('{}. first: {}, last: {}'.format(c,first_row, last_row))
 
 		while i > 0 and first_row <= last_row:
 			i = i-1
 			c = pattern[i]
 			first_row = self.Count[c] + self.Occ[c][first_row-1]
 			last_row = self.Count[c] + self.Occ[c][last_row] - 1
-			print('{}. first: {}, last: {}'.format(c,first_row, last_row))
+			# print('{}. first: {}, last: {}'.format(c,first_row, last_row))
 
 		if first_row > last_row:
-			return -1
+			return 0
 		return last_row - first_row + 1
-#----------------------------------------------------------
-import random
 
-def random_string(n):
-	return ''.join([ random.choice('actg') for i in range(n)])
-text = 'abaaba$'
-# text = random_string(30) + '$'
-b = BWT(text)
-print("org", text)
-print("bwt", b.bwt)
-print(b.query('ab'))
+	#----------------------------------------------------------
+	#Lutfar
+	def random_pseudo_align(self, pattern):
+		i = len(pattern)-1
+		c = pattern[i]
+		first_row = self.Count[c]
+		last_row = self.LastRow[c]
+		#print('{}. first: {}, last: {}'.format(c,first_row, last_row))
+		j=0
+		while i > 0 and first_row <= last_row:
+			j = j+1
+			i = i-1
+			c = pattern[i]
+			first_row = self.Count[c] + self.Occ[c][first_row-1]
+			last_row = self.Count[c] + self.Occ[c][last_row] - 1
+			#print('{}. first: {}, last: {}'.format(c,first_row, last_row))
+
+		if first_row > last_row:
+			return 0,j
+		return (last_row - first_row + 1),j
+#----------------------------------------------------------
+
+	def guess(self, pattern):
+		freq, matches = self.random_pseudo_align(pattern)
+		n = len(pattern)
+		if matches == n:
+			return True
+		return False
+
