@@ -21,9 +21,18 @@ def random_dna(n, id = None, fasta_out = None):
 def read_dna_fasta(filename):
 	with open(filename, 'r') as f:
 		header = f.readline().strip()
+		header_info = getHeaderInfo(header)
 		dna = ''.join([ s.strip() for s in f.readlines() ])
-		return header, dna
+		return header_info, dna
 
+def getHeaderInfo(header):
+	info_dict = {}
+	info_data = header.split('|')
+	for data in info_data:
+		if ":" in data:
+			key,value = data.split(': ')
+			info_dict[key] = value
+	return info_dict
 
 
 # generate random reads from reference gnome
@@ -94,6 +103,24 @@ def getFastaFiles(direc):
 	file_list = glob.glob(direc + "*.fasta")
 	#print(file_list)
 	return file_list
+
+def getRefDir(fasta_dir):
+	return fasta_dir + 'references/'
+
+def getReadDir(fasta_dir):
+	return fasta_dir + 'reads/'
+
+def getFMIDir(fasta_dir):
+	return fasta_dir + 'fmi/'
+
+def getRefFile(fasta_dir, id):
+	return getRefDir(fasta_dir) + "g"+str(id)+".fasta"
+
+def getReadFile(fasta_dir, id):
+	return getReadDir(fasta_dir) + "g"+str(id)+".fasta"
+
+def getFMIFile(fasta_dir, id):
+	return getFMIDir(fasta_dir) + "g"+str(id)+".pickle"
 
 
 

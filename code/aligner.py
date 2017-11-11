@@ -5,42 +5,32 @@ from util import *
 from fmi import *
 import pickle
 
-fmi_loc = 'data/fmi/'
 
-class Alligner():
-	def __init__(self):
+class Aligner():
+	def __init__(self, fasta_dir):
 		self.indexed_gnomes = []
+		self.fasta_dir = fasta_dir
 
-	def BuildIndex(self,header,reference_gnome):
+	def BuildIndex(self,header_info,reference_gnome):
 		index = FMI(reference_gnome+'$')
-		info_dict = self.getHeaderInfo(header)
-		#print(info_dict)
-		self.indexed_gnomes.append(info_dict['id'])
-		#print(">>")
-		file = open( fmi_loc + info_dict['id'] + '.pickle', 'wb')
+		self.indexed_gnomes.append(header_info['id'])
+		fmi_loc = getFMIFile(self.fasta_dir, header_info['id'])
+		file = open(fmi_loc , 'wb')
 		pickle.dump(index,file)
 		return index
 
-	def BuildIndexes(self, dir):
-		reference_gnome_files = getFastaFiles(dir)
+	def BuildIndexes(self):
+		reference_gnome_files = getFastaFiles(getRefDir(self.fasta_dir))
 		for reference_gnome_file in reference_gnome_files:
-			header,dna = read_dna_fasta(reference_gnome_file)
-			self.BuildIndex(header,dna)
+			header_info,dna = read_dna_fasta(reference_gnome_file)
+			self.BuildIndex(header_info,dna)
 
 	# load fmi from encoded file
 	def loadFMI(self, index_id):
-		file = open(fmi_loc + index_id + '.pickle', 'rb')
+		fmi_loc = getFMIFile(self.fasta_dir, index_id)
+		file = open(fmi_loc, 'rb')
 		data = pickle.load(file)
 		return data
-
-	def getHeaderInfo(self,header):
-		info_dict = {}
-		info_data = header.split('|')
-		for data in info_data:
-			if ":" in data:
-				key,value = data.split(': ')
-				info_dict[key] = value
-		return info_dict
 
 	def setIndexedGnomes(self,inds):
 		self.indexed_gnomes = inds
@@ -56,7 +46,7 @@ class Alligner():
 			elif freq < result:
 				most_likely_gnome_id, freq = ref_gnome_id, result
 		
-		if freq > 0:
+		if most_likely_gnome_id and freq > 0:
 			return most_likely_gnome_id, freq
 
 		else:
@@ -68,10 +58,10 @@ class Alligner():
 
 
 if __name__ == '__main__':
-	#al = Alligner()
-	#al.BuildIndexes('data/reference_gnomes/')
+	al = Aligner('data/dataset1/')
+	#al.BuildIndexes()
 	#print(al.loadFMI('aname'))
-	al = Alligner()
+	#al = Aligner('data/dataset1/')
 	al.setIndexedGnomes(['1','2'])
-	res = al.AllignExatcly("CAAAAT")
+	res = al.AllignExatcly("CAATT")
 	print(res)
