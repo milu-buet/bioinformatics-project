@@ -38,7 +38,7 @@ def getHeaderInfo(header):
 # generate random reads from reference gnome
 def generateRandomReads(reference_gnome, read_length, coverage, fasta_out=None):
 	reads = {}
-	number_of_reads = int(coverage/read_length)
+	number_of_reads = int(coverage*(len(reference_gnome))/read_length)
 	for i in range(number_of_reads):
 		j = random.randint(0, len(reference_gnome)-read_length)
 		reads[j,read_length] = reference_gnome[j:j+read_length]
@@ -116,8 +116,8 @@ def getFMIDir(fasta_dir):
 def getRefFile(fasta_dir, id):
 	return getRefDir(fasta_dir) + "g"+str(id)+".fasta"
 
-def getReadFile(fasta_dir, id):
-	return getReadDir(fasta_dir) + "g"+str(id)+".fasta"
+def getReadFile(fasta_dir, set_id, id):
+	return getReadDir(fasta_dir) + str(set_id) + "/g"+str(id)+".fasta"
 
 def getFMIFile(fasta_dir, id):
 	return getFMIDir(fasta_dir) + "g"+str(id)+".pickle"

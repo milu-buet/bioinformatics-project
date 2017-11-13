@@ -9,16 +9,24 @@ def generateDataset(num_gnomes, fasta_dir):
 		random_dna(n, i, fasta_out)
 
 
-def generateReads(fasta_dir):
-	ref_files = getFastaFiles(getRefDir(fasta_dir))
-	for ref_file in ref_files:
-		header_info, dna = read_dna_fasta(ref_file)
-		fasta_out = getReadFile(fasta_dir, header_info['id'])
-		read_length = random.randint(200, 300)
-		generateRandomReads(dna, read_length, coverage, fasta_out)
+def generateReads(fasta_dir, settings):
+	reads_sets = settings['reads_sets']
+	for reads_set_id, reads_set in reads_sets.items():
+		coverages = reads_set['coverages']
+		for gnome_id, coverage in coverages.items():
+			ref_file = getRefFile(fasta_dir, gnome_id)
+			header_info, dna = read_dna_fasta(ref_file)
+
+			fasta_out = getReadFile(fasta_dir, reads_set_id,  gnome_id)
+			read_length = random.randint(settings['read_min_length'], settings['read_max_length'])
+
+			#print(coverage)
+
+			generateRandomReads(dna, read_length, coverage, fasta_out)
 
 
 if __name__ == '__main__':
-	generateDataset(2, 'data/dataset1/')
-	generateDataset(8, 'data/dataset2/')
-	generateDataset(64, 'data/dataset3/')
+	pass
+	#generateDataset(2, 'data/dataset1/')
+	#generateDataset(8, 'data/dataset2/')
+	#generateDataset(64, 'data/dataset3/')

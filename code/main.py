@@ -8,16 +8,16 @@ settings = {
 	'read_min_length': 200,
 	'read_max_length': 300,
 	'error': 0.0,
-	"reads": {
-			1: {
-				'coverage': {
-				    1: 1,
+	"reads_sets": {
+			1: {   # 1-> read set id
+				'coverages': {
+				    1: 1,   # gnome_id : coverage
 				    2: 2
 				}
 			},
 
 			2: {
-				'coverage': {
+				'coverages': {
 				    1: 2,
 				    2: 4
 				}
@@ -45,8 +45,11 @@ datasets = {
 
 
 def createDataset(id):
-	print(datasets[id])
+	#print(datasets[id])
 	generateDataset(datasets[id]['gnomes'],datasets[id]['root'])
+
+def createReadsSets(id):
+	generateReads(datasets[id]['root'], settings)
 
 
 def createFMI(id):
@@ -63,26 +66,34 @@ def createDatasets():
 	createDataset(1)
 	print('Creating FMI for dataset 1 ....')
 	createFMI(1)
+	print('Creating reads for dataset 1 ....')
+	createReadsSets(1)
 	print('completed dataset 1 ....')
 
 	print('Creating dataset  2....')
 	createDataset(2)
 	print('Creating FMI for dataset 2 ....')
 	createFMI(2)
+	print('Creating reads for dataset 2 ....')
+	createReadsSets(2)
 	print('completed dataset 2 ....')
 
 	print('Creating dataset  3....')
 	createDataset(3)
 	print('Creating FMI for dataset 3 ....')
 	createFMI(3)
+	print('Creating reads for dataset 3 ....')
+	createReadsSets(3)
 	print('completed dataset 3 ....')
+
+
 
 if __name__ == '__main__':
 	
 	#createDatasets()  #one time run
 
 	on_dataset = 3 
-	result = classify("ATGCATAAAAAT", on_dataset)
+	result = classify("ATGCAAAAT", on_dataset)
 	print(result)
 
 
