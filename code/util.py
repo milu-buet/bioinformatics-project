@@ -35,13 +35,35 @@ def getHeaderInfo(header):
 	return info_dict
 
 
+def mutate_one_base(seq, bases):
+	options = list(bases)
+	i = random.randint(0, len(seq)-1)
+	if seq[i] in options:
+		options.remove(seq[i])
+	s = list(seq)
+	s[i] = options[ random.randint(0, len(options)-1) ]
+	return ''.join(s)
+
+
+
+def addErrors(read,error_count):
+	for i in range(error_count):
+		read = mutate_one_base(read, 'AGTC')
+
+	return read
+
+
 # generate random reads from reference gnome
-def generateRandomReads(reference_gnome, read_length, coverage, fasta_out=None):
+def generateRandomReads(reference_gnome, read_length, coverage, fasta_out=None, add_error = False):
 	reads = {}
 	number_of_reads = int(coverage*(len(reference_gnome))/read_length)
 	for i in range(number_of_reads):
 		j = random.randint(0, len(reference_gnome)-read_length)
 		reads[j,read_length] = reference_gnome[j:j+read_length]
+
+		if add_error:
+			error_count = int(len(reads[j,read_length])/100.0)
+			reads[j,read_length] = addErrors(reads[j,read_length],error_count)
 
 	if fasta_out is not None:
 		with open(fasta_out, 'w') as f:
@@ -61,15 +83,6 @@ def read_randomRead_fasta(filename):
 					reads[i] = rawReads[i+1]
 	return reads
 
-#----------------------------------------------------------------------------
-def mutate_one_base(seq, bases):
-	options = list(bases)
-	i = random.randint(0, len(seq)-1)
-	if seq[i] in options:
-		options.remove(seq[i])
-	s = list(seq)
-	s[i] = options[ random.randint(0, len(options)-1) ]
-	return ''.join(s)
 
 #----------------------------------------------------------------------------
 '''
@@ -136,8 +149,8 @@ if __name__ == '__main__':
 	#reads = read_randomRead_fasta('data/reads.fasta')
 	#print(reads)
 
-	random_dna(100,1,'data/reference_gnomes/g1.fasta')
-	file_list = getFastaFiles("data/reference_gnomes/")
+	#random_dna(100,1,'data/dataset1/references/g1.fasta')
+	file_list = getFastaFiles('data/dataset1/references/')
 	print(file_list)
 
 

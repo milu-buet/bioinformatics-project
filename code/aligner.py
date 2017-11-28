@@ -53,7 +53,20 @@ class Aligner():
 			return None, None
 
 	def AlignApproximately(self, short_read):
-		pass
+		most_likely_gnome_id, freq, matches  = None , None, None
+		for ref_gnome_id in self.indexed_gnomes:
+			index = self.loadFMI(ref_gnome_id)
+			this_freq, this_matches = index.random_pseudo_align(short_read)
+
+			if (most_likely_gnome_id is None) or (freq < this_freq) or (freq == this_freq and matches < this_matches):
+				most_likely_gnome_id, freq, matches = ref_gnome_id, this_freq, this_matches
+
+
+		if most_likely_gnome_id and matches > 0:
+			return most_likely_gnome_id, freq, matches
+
+		else:
+			return None, None, None
 
 
 

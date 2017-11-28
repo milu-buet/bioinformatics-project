@@ -9,7 +9,7 @@ def generateDataset(num_gnomes, fasta_dir):
 		random_dna(n, i, fasta_out)
 
 
-def generateReads(fasta_dir, settings):
+def generateReads(fasta_dir, settings, add_error=False):
 	reads_sets = settings['reads_sets']
 	for reads_set_id, reads_set in reads_sets.items():
 		coverages = reads_set['coverages']
@@ -22,7 +22,7 @@ def generateReads(fasta_dir, settings):
 
 			#print(coverage)
 
-			generateRandomReads(dna, read_length, coverage, fasta_out)
+			generateRandomReads(dna, read_length, coverage, fasta_out, add_error)
 
 
 if __name__ == '__main__':
