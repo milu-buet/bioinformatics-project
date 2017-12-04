@@ -9,27 +9,26 @@ def classify(short_read, id, exact=True):
 	if exact==True:
 		return alg.AlignExatcly(short_read)[0]
 	else:
-		return 0
+		return alg.AlignApproximately(short_read)[0]
 
 def get_reads(dataset_id,readset,gnome):
 	fasta_dir = 'data/dataset' + str(dataset_id) + '/'
 	filename = getReadFile(fasta_dir, readset, gnome)
 	return read_randomRead_fasta(filename)
 
-#Begin: Q6----------------------------------------------------------------
-def runExperiment1_by_Dataset_Readset(dataset_id,readset):
+
+def runExperiment_by_Dataset_Readset(dataset_id,readset, exact=True):
 	gnomes = datasets[dataset_id]["gnomes"]
 	#total_reads = 0
 	tp,fp,fn = 0,0,0
 
-
 	#print(gnomes)
-	for gnome in range(1,gnomes+1):
+	for gnome in [1,2]:
 		reads = get_reads(dataset_id,readset,gnome)
-		print(len(reads))
+		#print(len(reads))
 		for id,read in reads.items():
 			#print(read)
-			result = classify(read, dataset_id)
+			result = classify(read, dataset_id, exact)
 			#total_reads+=1
 			if result == gnome:
 				tp+=1
@@ -41,25 +40,24 @@ def runExperiment1_by_Dataset_Readset(dataset_id,readset):
 	return tp,fp,fn
 
 
-def runExperiment1_by_Dataset(dataset_id):
-	
-	tp1,fp1,fn1 = runExperiment1_by_Dataset_Readset(dataset_id,1)
-	print(tp1,fp1,fn1)
-	return tp1,fp1,fn1
-	#tp2,fp2,fn2 = runExperiment1_by_Dataset_Readset(dataset_id,2)
-	#print(tp2,fp2,fn2)
+def runExperiment_by_Dataset(dataset_id, exact=True):
 
-	#print("Dataset %s is done!"%(dataset_id))
+	exp_readsets = [1,2,3]
+	tp,fp,fn = 0,0,0
+	for rset in exp_readsets:
+		tpn,fpn,fnn = runExperiment_by_Dataset_Readset(dataset_id,rset,exact)
+		tp,fp,fn = tp+tpn,fp+fpn,fn+fnn
 
-	#return tp1+tp2,fp1+fp2,fn1+fn2
+	return tp,fp,fn
 
 
-def runExperiment1():
-	print('running ...')
-	tp1,fp1,fn1 = runExperiment1_by_Dataset(1)
-	print(tp1,fp1,fn1)
-	print('ended ...')
+
+# def runExperiment1():
+# 	print('running ...')
+# 	tp1,fp1,fn1 = runExperiment_by_Dataset(1,True)
+# 	print(tp1,fp1,fn1)
+# 	print('ended ...')
 
 
-runExperiment1()
+# runExperiment1()
 #----------------------------------------------------------------

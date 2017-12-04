@@ -1,6 +1,8 @@
 from aligner import *
 from datagenerator import *
 from settings import settings, datasets
+from experiments import *
+import time
 
 
 def createDataset(id):
@@ -15,40 +17,83 @@ def createFMI(id):
 	alg = Aligner(datasets[id]['root'])
 	alg.BuildIndexes()
 
-def classify(short_read, id):
-	alg = Aligner(datasets[id]['root'])
-	alg.setIndexedGnomes(range(1, datasets[id]['gnomes']+1))
-	return alg.AlignExatcly(short_read)[0]
+# def classify(short_read, id):
+# 	alg = Aligner(datasets[id]['root'])
+# 	alg.setIndexedGnomes(range(1, datasets[id]['gnomes']+1))
+# 	return alg.AlignExatcly(short_read)[0]
 
 def createDatasets(ids,d,f,r,add_error=False):
 	for id in ids:
 		if d==1:
-			print('Creating dataset %s ....'%(id,))
+			#print('Creating dataset %s ....'%(id,))
 			createDataset(id)
 		if f==1:
-			print('Creating FMI for dataset %s ....'%(id,))
+			#print('Creating FMI for dataset %s ....'%(id,))
 			createFMI(id)
 		if r==1:
-			print('Creating reads for dataset %s ....'%(id,))
+			#print('Creating reads for dataset %s ....'%(id,))
 			createReadsSets(id,add_error)
-		print('completed dataset %s ....'%(id,))
+		#print('completed dataset %s ....'%(id,))
+
+def show_report(dset,tp,fp,fn,runtime):
+	
+	if tp>0:
+		precision = float(tp)/(tp+fp)
+		recall = float(tp)/(tp+fn)
+	else:
+		precision = 0
+		recall = 0
+	print("Dataset%s: runtime: %s, precision: %s, recall: %s"% (dset,runtime,precision,recall,))
+
+	print("\n")
+
+
+def runExperiment(exp_datasets, exact=True):
+	
+	for dset in exp_datasets:
+		start = time.time()
+		tp,fp,fn = runExperiment_by_Dataset(dset,exact)
+		end = time.time()
+		show_report(dset,tp,fp,fn,end-start)
+		print("Experiment on dataset %s completed"%(dset,))
 
 
 
+def runExperiment1(exp_datasets):
+	print('Running experiment 1 (Alignexactly, No Error) ...')
+	#createDatasets(exp_datasets,0, 0, 1, False)
+	runExperiment(exp_datasets,True)
+	print('Experiment 1 ended ...')
+	
 
-def run_experiment_and_report_Q6():
-	pass
+def runExperiment2(exp_datasets):
+	print('Running experiment 2 (Align exactly, 1 percent Error) ...')
+	#createDatasets(exp_datasets,0, 0, 1, True)
+	runExperiment(exp_datasets,True)
+	print('Experiment 2 ended ...')
+		
+
+def runExperiment3(exp_datasets):
+	print('Running experiment 2 (Align approximately, 1 percent Error) ...')
+	#createDatasets(exp_datasets,0, 0, 1, True)
+	runExperiment(exp_datasets,False)
+	print('Experiment 2 ended ...')
+
+
+def runExperiments():
+	exp_datasets = [1,2,3]
+
+	createDatasets(exp_datasets,0, 0, 1, False)
+	runExperiment1(exp_datasets)
+
+	#createDatasets(exp_datasets,0, 0, 1, True)
+	#runExperiment2(exp_datasets)
+	#runExperiment3(exp_datasets)
 
 
 
 
 if __name__ == '__main__':
 	
-	createDatasets([1,],0, 0, 1, True)  #one time run
-
-	on_dataset = 1
-	result = classify("ATGCAAAAT", on_dataset)
-	print(result)
-
-
+	runExperiments()
 

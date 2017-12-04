@@ -4,6 +4,7 @@ settings = {
 	'read_min_length': 200,
 	'read_max_length': 300,
 	'error': 0.0,
+	'matching_threshold': 8,
 	"reads_sets": {
 			1: {   # 1-> read set id
 				'coverages': {
@@ -16,6 +17,13 @@ settings = {
 				'coverages': {
 				    1: 2,
 				    2: 4
+				}
+			},
+
+			3: {
+				'coverages': {
+				    1: 3,
+				    2: 5
 				}
 			}
 

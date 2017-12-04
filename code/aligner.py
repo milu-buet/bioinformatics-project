@@ -4,6 +4,7 @@
 from util import *
 from fmi import *
 import pickle
+from settings import settings, datasets
 
 
 class Aligner():
@@ -53,13 +54,17 @@ class Aligner():
 			return None, None
 
 	def AlignApproximately(self, short_read):
+		matching_threshold = settings['matching_threshold'] #len(short_read)/5
 		most_likely_gnome_id, freq, matches  = None , None, None
 		for ref_gnome_id in self.indexed_gnomes:
 			index = self.loadFMI(ref_gnome_id)
 			this_freq, this_matches = index.random_pseudo_align(short_read)
 
-			if (most_likely_gnome_id is None) or (freq < this_freq) or (freq == this_freq and matches < this_matches):
+			if (this_matches > matching_threshold) and ((most_likely_gnome_id is None) or (freq < this_freq) or (freq == this_freq and matches < this_matches)):
 				most_likely_gnome_id, freq, matches = ref_gnome_id, this_freq, this_matches
+				if this_matches > 2*matching_threshold:
+					return most_likely_gnome_id, freq, matches
+
 
 
 		if most_likely_gnome_id and matches > 0:
