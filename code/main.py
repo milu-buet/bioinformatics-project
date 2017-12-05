@@ -17,11 +17,6 @@ def createFMI(id):
 	alg = Aligner(datasets[id]['root'])
 	alg.BuildIndexes()
 
-# def classify(short_read, id):
-# 	alg = Aligner(datasets[id]['root'])
-# 	alg.setIndexedGnomes(range(1, datasets[id]['gnomes']+1))
-# 	return alg.AlignExatcly(short_read)[0]
-
 def createDatasets(ids,d,f,r,add_error=False):
 	for id in ids:
 		if d==1:
@@ -45,7 +40,6 @@ def show_report(dset,tp,fp,fn,runtime):
 		recall = 0
 	print("Dataset%s: runtime: %s, precision: %s, recall: %s"% (dset,runtime,precision,recall,))
 
-	print("\n")
 
 
 def runExperiment(exp_datasets, exact=True):
@@ -61,21 +55,21 @@ def runExperiment(exp_datasets, exact=True):
 
 def runExperiment1(exp_datasets):
 	print('Running experiment 1 (Alignexactly, No Error) ...')
-	#createDatasets(exp_datasets,0, 0, 1, False)
+	createDatasets(exp_datasets,0, 0, 1, False)
 	runExperiment(exp_datasets,True)
 	print('Experiment 1 ended ...')
 	
 
 def runExperiment2(exp_datasets):
 	print('Running experiment 2 (Align exactly, 1 percent Error) ...')
-	#createDatasets(exp_datasets,0, 0, 1, True)
+	createDatasets(exp_datasets,0, 0, 1, True)
 	runExperiment(exp_datasets,True)
 	print('Experiment 2 ended ...')
 		
 
 def runExperiment3(exp_datasets):
 	print('Running experiment 2 (Align approximately, 1 percent Error) ...')
-	#createDatasets(exp_datasets,0, 0, 1, True)
+	createDatasets(exp_datasets,0, 0, 1, True)
 	runExperiment(exp_datasets,False)
 	print('Experiment 2 ended ...')
 
@@ -83,12 +77,9 @@ def runExperiment3(exp_datasets):
 def runExperiments():
 	exp_datasets = [1,2,3]
 
-	createDatasets(exp_datasets,0, 0, 1, False)
 	runExperiment1(exp_datasets)
-
-	#createDatasets(exp_datasets,0, 0, 1, True)
-	#runExperiment2(exp_datasets)
-	#runExperiment3(exp_datasets)
+	runExperiment2(exp_datasets)
+	runExperiment3(exp_datasets)
 
 
 
