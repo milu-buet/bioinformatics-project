@@ -1,5 +1,11 @@
-# Md Lutfar Rahman
-#Q4
+#
+# MD LUTFAR RAHMAN 
+#
+# mrahman9@memphis.edu
+#
+# COMP 8295 - Course Project
+#
+
 
 from util import *
 from fmi import *

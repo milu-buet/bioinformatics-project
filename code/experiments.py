@@ -1,7 +1,15 @@
+#
+# MD LUTFAR RAHMAN 
+#
+# mrahman9@memphis.edu
+#
+# COMP 8295 - Course Project
+#
 from aligner import *
 from settings import settings, datasets
 from util import *
 
+#classify a short_read in a dataset=id, exactly or approximately
 def classify(short_read, id, exact=True):
 	alg = Aligner(datasets[id]['root'])
 	alg.setIndexedGnomes(range(1, datasets[id]['gnomes']+1))
@@ -11,6 +19,7 @@ def classify(short_read, id, exact=True):
 	else:
 		return alg.AlignApproximately(short_read)[0]
 
+# get all reads of a readset in a dataset
 def get_reads(dataset_id,readset,gnome):
 	fasta_dir = 'data/dataset' + str(dataset_id) + '/'
 	filename = getReadFile(fasta_dir, readset, gnome)

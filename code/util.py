@@ -1,3 +1,10 @@
+#
+# MD LUTFAR RAHMAN 
+#
+# mrahman9@memphis.edu
+#
+# COMP 8295 - Course Project
+#
 import random
 
 #generate random dna
@@ -25,6 +32,7 @@ def read_dna_fasta(filename):
 		dna = ''.join([ s.strip() for s in f.readlines() ])
 		return header_info, dna
 
+#parse header string of a gnome or read and create dictionary
 def getHeaderInfo(header):
 	info_dict = {}
 	info_data = header.split('|')
@@ -35,6 +43,7 @@ def getHeaderInfo(header):
 	return info_dict
 
 
+# mutate one base of any read
 def mutate_one_base(seq, bases):
 	options = list(bases)
 	i = random.randint(0, len(seq)-1)
@@ -45,7 +54,7 @@ def mutate_one_base(seq, bases):
 	return ''.join(s)
 
 
-
+# How many mutation happens = error_count
 def addErrors(read,error_count):
 	for i in range(error_count):
 		read = mutate_one_base(read, 'AGTC')
@@ -73,7 +82,7 @@ def generateRandomReads(reference_gnome, read_length, coverage, fasta_out=None, 
 	return reads
 
 
-# read randomRead fasta
+# read random Read fasta
 def read_randomRead_fasta(filename):
 	reads = {}
 	with open(filename, 'r') as f:

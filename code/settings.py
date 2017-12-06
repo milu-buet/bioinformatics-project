@@ -1,14 +1,23 @@
+#
+# MD LUTFAR RAHMAN 
+#
+# mrahman9@memphis.edu
+#
+# COMP 8295 - Course Project
+#
+
+# All the project settings
 settings = {
 	'gnome_min_length': 50000,
 	'gnome_max_length': 100000,
 	'read_min_length': 200,
 	'read_max_length': 300,
 	'error': 0.0,
-	'matching_threshold': 8,
-	"reads_sets": {
-			1: {   # 1-> read set id
+	'matching_threshold': 8,  # alignapproximately matching
+	"reads_sets": {  # read set id: {'coverages': { gnome_id : coverage }}
+			1: {   
 				'coverages': {
-				    1: 1,   # gnome_id : coverage
+				    1: 1,  
 				    2: 2
 				}
 			},
@@ -31,10 +40,11 @@ settings = {
 
 }
 
+#dataset location and number of gnomes
 datasets = {
 	1: {
-		"root": 'data/dataset1/',
-		"gnomes": 2,
+		"root": 'data/dataset1/',  #location
+		"gnomes": 2, # gnome count
 		
 	},
 	2: {

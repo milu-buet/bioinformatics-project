@@ -1,3 +1,11 @@
+#
+# MD LUTFAR RAHMAN 
+#
+# mrahman9@memphis.edu
+#
+# COMP 8295 - Course Project
+#
+
 from aligner import *
 from datagenerator import *
 from settings import settings, datasets
@@ -87,4 +95,3 @@ def runExperiments():
 if __name__ == '__main__':
 	
 	runExperiments()
-

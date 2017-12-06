@@ -1,3 +1,10 @@
+#
+# MD LUTFAR RAHMAN 
+#
+# mrahman9@memphis.edu
+#
+# COMP 8295 - Course Project
+#
 class FMI():
 	def __init__(self, t):
 		self.LastRow = {}
